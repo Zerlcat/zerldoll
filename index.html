@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZerlDoll @gamersbanjar</title>
+    <style>
+     * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #000;
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background-color 0.3s, color 0.3s;
+            position: relative;
+        }
+        
+        .watermark {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .watermark-item {
+            color: rgba(128, 128, 128, 0.15);
+            font-size: 18px;
+            font-weight: bold;
+            padding: 30px;
+            transform: rotate(-30deg);
+            white-space: nowrap;
+            user-select: none;
+        }
+        
+        body.light-mode {
+            background-color: #fff;
+            color: #000;
+        }
+
+        .header {
+            background-color: #e429b3;
+            padding: 3px 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        .logo-container {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 10px;
+        }
+
+        .title {
+            font-size: 2.5rem;
+            color: white;
+            font-family: "Times New Roman", Times, serif;
+            text-align: center;
+            flex-grow: 1;
+            cursor: pointer; /* cursor */
+        }
+
+        .search-container {
+            background-color: #66666600;/*CARI BORDER*/
+            padding: 8px;
+            display: flex;
+            align-items: center;
+            position: fixed;
+            top: 60px;
+            left: 0;
+            right: 0;
+            z-index: 999;
+            transition: transform 0.3s ease-out;
+        }
+
+        .search-label {
+            color: white;
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+
+        .search-input {
+            flex-grow: 1;
+            padding: 5px;
+            font-size: 1rem;
+        }
+
+        .content-area {
+            margin-top: 110px;
+            padding-bottom: 80px;
+        }
+
+        .product-grid {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 10px;
+            gap: 20px;
+            justify-content: flex-start;
+        }
+
+        .product-item {
+            width: calc(50% - 10px);
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        @media screen and (min-width: 768px) {
+            .product-item {
+                width: calc(33.333% - 20px);
+            }
+        }
+        
+        @media screen and (min-width: 1024px) {
+            .product-item {
+                width: calc(25% - 20px);
+            }
+        }
+        
+        @media screen and (min-width: 1280px) {
+            .product-item {
+                width: calc(20% - 20px);
+            }
+        }
+
+        .product-item img {
+            width: 100%;
+            max-width: 190px;
+            height: 290px;
+            object-fit: cover;
+            cursor: pointer;
+        }
+
+        .product-name {
+            margin-top: 5px;
+            font-size: 1.2rem;
+            text-align: center;
+            cursor: pointer; /* Add cursor pointer for product name */
+        }
+
+        .price {
+            color: #34a534;/*PRICE HARGA*/
+            cursor: pointer; /* Add cursor pointer for price */
+        }
+
+        .footer {
+            background-color: #888;
+            padding: 3px 10px;
+            text-align: center;
+            line-height: 1.6;
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 1000;
+        }
+
+        .side-menu {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 2000;
+            top: 0;
+            left: 0;
+            background-color: #e429b3;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+        }
+
+        .side-menu a {
+            padding: 8px 8px 8px 32px;
+            text-decoration: none;
+            font-size: 25px;
+            color: white;
+            display: block;
+            transition: 0.3s;
+        }
+
+        /* Style for disabled menu items */
+        .side-menu .disabled-menu-item {
+            padding: 8px 8px 8px 32px;
+            font-size: 25px;
+            color: #888; /* Gray color for disabled items */
+            display: block;
+            cursor: default;
+        }
+
+        .side-menu a:hover {
+            color: #f1f1f1;
+        }
+
+        .side-menu .close-btn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+            margin-left: 50px;
+            text-decoration: none;
+        }
+
+        .overlay {
+            height: 100%;
+            width: 100%;
+            position: fixed;
+            z-index: 1500;
+            top: 0;
+            left: 0;
+            background-color: rgba(0,0,0,0.5);
+            overflow-x: hidden;
+            display: none;
+        }
+        
+        .right-menu {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 2000;
+            top: 0;
+            right: 0;
+            background-color: #e429b3;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+            text-align: center;
+        }
+
+        .right-menu a {
+            padding: 8px 32px;
+            text-decoration: none !important;
+            font-size: 25px;
+            color: white;
+            display: block;
+            transition: 0.3s;
+        }
+
+        .right-menu .close-btn {
+            position: absolute;
+            top: 0;
+            font-size: 36px;
+            text-decoration: none !important;
+        }
+        
+        .splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 3000;
+        }
+        
+        .splash-content {
+            background-color: #000000;
+            padding: 40px;
+            border-radius: 15px;
+            border: 2px solid #e429b3;
+            text-align: center;
+            max-width: 90%;
+            width: 400px;
+            position: relative;
+            z-index: 3001;
+        }
+        
+        .splash-content h2 {
+            font-size: 24px;
+            margin-bottom: 30px;
+            color: white;
+        }
+        
+        .age-button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            color: white;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        
+        .age-button.adult {
+            background-color: #da27aa;
+        }
+        
+        .age-button.adult:hover {
+            background-color: #7d1565;
+        }
+        
+        .age-button.minor { /*keluar*/
+            background-color: #414141;
+            cursor: not-allowed;
+            opacity: 1;
+        }
+        
+        .main-content {
+            display: none;
+        }
+        
+        .splash-watermark {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 2999;
+        }
+        
+        .splash-watermark-item {
+            color: rgba(128, 128, 128, 0.15);
+            font-size: 18px;
+            font-weight: bold;
+            padding: 30px;
+            transform: rotate(-30deg);
+            white-space: nowrap;
+            user-select: none;
+        }
+        
+        .gallery-modal {
+            display: none;
+            position: fixed;
+            z-index: 3000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            overflow: hidden;
+        }
+        
+        .gallery-content {
+            position: relative;
+            width: 90%;
+            max-width: 800px;
+            margin: 5% auto;
+            height: 80%;
+        }
+        
+        .gallery-main-img {
+            width: 100%;
+            height: 80%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .gallery-main-img img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        
+        .gallery-thumbnails {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            gap: 10px;
+            overflow-x: auto;
+        }
+        
+        .gallery-thumbnail {
+            width: 70px;
+            height: 70px;
+            object-fit: cover;
+            cursor: pointer;
+            opacity: 0.6;
+            transition: opacity 0.3s;
+        }
+        
+        .gallery-thumbnail.active {
+            opacity: 1;
+            border: 2px solid #e429b3;
+        }
+        
+        .gallery-close {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 30px;
+            color: white;
+            cursor: pointer;
+        }
+        
+        .gallery-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 40px;
+            color: white;
+            cursor: pointer;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+        }
+        
+        .gallery-next {
+            right: 10px;
+        }
+        
+        .gallery-prev {
+            left: 10px;
+        }
+        
+        .login-text {
+            color: #888;
+            margin-top: 10px;
+            font-size: 20px;
+            text-align: right;
+            padding-right: 32px;
+            cursor: pointer;
+        }
+
+        .error-modal {
+            display: none;
+            position: fixed;
+            z-index: 3100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .error-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+        }
+        
+        .error-content h2 {
+            color: #e42929;
+            margin-bottom: 15px;
+        }
+        
+        .error-content p {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .error-button {
+            background-color: #e429b3;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .error-button:hover {
+            background-color: #c41c98;
+        }
+    </style>
+</head>
+<body>
+    <div class="splash-screen" id="splashScreen">
+        <div class="splash-watermark" id="splashWatermark"></div>
+        <div class="splash-content">
+            <h2>Selamat Datang di Toko ZerlDoll</h2>
+            <button class="age-button adult" onclick="enterWebsite()">Saya berusia 18 tahun Keatas</button>
+            <button class="age-button minor" id="minorButton">Saya Dibawah 18 Tahun <b>(Keluar)</b></button>
+            <h5>TikTok: @gamersbanjar</h5>
+        </div>
+    </div>
+
+    <div class="main-content" id="mainContent">
+        <div class="watermark" id="watermark"></div>
+        <div class="header">
+            <div class="logo-container">
+                <img src="foto1.png" alt="Foto 1" width="28" height="28">
+                <h1 class="title" onclick="location.reload()">ZerlDoll</h1>
+                <img src="foto2.png" alt="Foto 2" width="35" height="35">
+            </div>
+        </div>
+        <div class="search-container" id="searchBar">
+            <input type="text" class="search-input" placeholder="Telusuri...">
+            <button onclick="searchProducts()" style="padding: 7px 10px; background-color: #e429b3; color: white; border: none; cursor: pointer;">Cari</button>
+        </div>
+
+        <div class="content-area">
+            <div class="product-grid">
+                <div class="product-item">
+                    <img src="foto1.jpg" alt="Foto 1" onclick="window.location.href='produk_cute_theresa.html'">
+                    <div class="product-name" onclick="window.location.href='produk_cute_theresa.html'"><b>Cute Theresa - 150cm Premium Silicone</b> <span class="price">Rp.37.199.000</span></div>
+                </div>
+                
+                <div class="product-item">
+                    <img src="foto2.jpg" alt="Foto 2" onclick="window.location.href='produk_ren_sirah.html'">
+                    <div class="product-name" onclick="window.location.href='produk_ren_sirah.html'"><b>Ren Sirah - 160cm Silicone</b> <span class="price">19.399.000</span></div>
+                </div>
+                
+                <div class="product-item">
+                    <img src="foto3.jpg" alt="Foto 3" onclick="window.location.href='produk_hu_tao.html'">
+                    <div class="product-name" onclick="window.location.href='produk_hu_tao.html'"><b>Hu Tao Genshin Impact - 140cm TPE</b> <span class="price">Rp.8.999.000</span></div>
+                </div>
+
+                <div class="product-item">
+                    <img src="foto4.jpg" alt="Foto 4" onclick="window.location.href='produk_evie.html'">
+                    <div class="product-name" onclick="window.location.href='produk_evie.html'"><b>Evie - 160cm  Premium Silicone</b> <span class="price">Rp.42.599.000</span></div>
+                </div>
+
+                <div class="product-item">
+                    <img src="foto5.jpg" alt="Foto 5" onclick="window.location.href='produk_hina.html'">
+                    <div class="product-name" onclick="window.location.href='produk_hina.html'"><b>Hina - 148cm Silicone</b> <span class="price">Rp.29.199.000</span></div>
+                </div>
+
+                <div class="product-item">
+                    <img src="foto6.jpg" alt="Foto 6" onclick="window.location.href='produk_guxiaoyu.html'">
+                    <div class="product-name" onclick="window.location.href='produk_guxiaoyu.html'"><b>Guxiaoyu - 150cm Premium Silicone</b> <span class="price">Rp.19.399.000</span></div>
+                </div>
+
+                <div class="product-item">
+                    <img src="foto7.jpg" alt="Foto 7" onclick="window.location.href='produk_kino_kayako.html'">
+                    <div class="product-name" onclick="window.location.href='produk_kino_kayako.html'"><b>Kino Kayako - 150cm Silicone</b> <span class="price">Rp.29.399.000</span></div>
+                </div>
+
+                <div class="product-item">
+                    <img src="foto8.jpg" alt="Foto 8" onclick="window.location.href='produk_xifeng.html'">
+                    <div class="product-name"onclick="window.location.href='produk_xifeng.html'"><b>XiFeng - 151cm Premium TPE</b> <span class="price">Rp.32.299.000</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <h5>Toko Boneka Premium Provinsi <b>Kalimantan Selatan</b></h5>
+            <h5><b>Banjarmasin, Marabahan, Amuntai, Batulicin</b></h5>
+        </div>
+
+        <div id="mySideMenu" class="side-menu">
+            <a href="javascript:void(0)" class="close-btn" onclick="closeNav()">&times;</a>
+            <div class="disabled-menu-item">Tipe Boneka ></div>
+            <div class="disabled-menu-item">Lokasi ></div>
+            <a href="https://www.tiktok.com/@gamersbanjar">Sosial Media</a>
+            <div class="disabled-menu-item">Bantuan</div>
+            <div class="disabled-menu-item">Blog</div>
+            <a></a>
+        </div>
+        
+        <div id="myRightMenu" class="right-menu">
+            <a href="javascript:void(0)" class="close-btn" onclick="closeRightNav()" style="text-decoration: none !important;">&times;</a>
+            <a style="text-align: right;" href="#" onclick="toggleDarkMode()">Mode Gelap/Terang</a>
+            <div class="login-text">Log In</div>
+        </div>
+
+        <div id="overlay" class="overlay" onclick="closeAllNav()"></div>
+        
+        <div id="galleryModal" class="gallery-modal">
+            <div class="gallery-content">
+                <span class="gallery-close" onclick="closeGallery()">&times;</span>
+                <div class="gallery-main-img">
+                    <img id="galleryMainImg" src="" alt="Main Image">
+                </div>
+                
+                <div class="gallery-nav gallery-prev" onclick="changeImage(-1)">&#10094;</div>
+                <div class="gallery-nav gallery-next" onclick="changeImage(1)">&#10095;</div>
+                
+                <div class="gallery-thumbnails" id="galleryThumbnails">
+                </div>
+                
+                <div style="text-align: center; color: white; margin-top: 10px;">
+                    <h3 id="galleryTitle"></h3>
+                    <p id="galleryPrice" style="color: #34a534;"></p>
+                </div>
+            </div>
+        </div>
+        
+        <div id="errorModal" class="error-modal" style="display: none;">
+            <div class="error-content">
+                <h2>404 Error Not Found</h2>
+                <p>Chat via TikTok saja, Halaman ini masih di kembangkan</p>
+                <button class="error-button" onclick="closeErrorModal()">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentGalleryImages = [];
+        let currentImageIndex = 0;
+        
+        function createWatermark(containerId) {
+            const watermarkContainer = document.getElementById(containerId);
+            if (!watermarkContainer) return;
+            
+            const screenWidth = window.innerWidth;
+            const screenHeight = window.innerHeight;
+            
+            watermarkContainer.innerHTML = '';
+            
+            const columns = Math.ceil(screenWidth / 150);
+            const rows = Math.ceil(screenHeight / 100);
+            
+            const itemClass = containerId === 'splashWatermark' ? 'splash-watermark-item' : 'watermark-item';
+            
+            for (let i = 0; i < rows; i++) {
+                for (let j = 0; j < columns; j++) {
+                    const watermarkItem = document.createElement('div');
+                    watermarkItem.className = itemClass;
+                    watermarkItem.textContent = '@gamersbanjar';
+                    watermarkContainer.appendChild(watermarkItem);
+                }
+            }
+        }
+        
+        document.addEventListener("DOMContentLoaded", function() {
+            createWatermark('splashWatermark');
+            initMainContent();
+        });
+        
+        function enterWebsite() {
+            document.getElementById('splashScreen').style.display = 'none';
+            document.getElementById('mainContent').style.display = 'block';
+            createWatermark('watermark');
+            initImagePlaceholders();
+        }
+        
+        document.getElementById('minorButton').addEventListener('click', function() {
+            window.location.href = "https://www.tiktok.com/@gamersbanjar";
+            alert("Anda harus berusia 18 tahun ke atas untuk mengakses website ini :D");
+        });
+
+        const searchBar = document.getElementById('searchBar');
+        const searchInput = document.querySelector('.search-input');
+        
+        let lastScrollPosition = 0;
+        
+        window.addEventListener('scroll', function() {
+            const currentScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+            
+            if (currentScrollPosition > lastScrollPosition) {
+                searchBar.style.transform = 'translateY(-100%)';
+            } else {
+                searchBar.style.transform = 'translateY(0)';
+            }
+            
+            lastScrollPosition = currentScrollPosition;
+        });
+
+        function openNav() {
+            document.getElementById("mySideMenu").style.width = "250px";
+            document.getElementById("overlay").style.display = "block";
+        }
+
+        function closeNav() {
+            document.getElementById("mySideMenu").style.width = "0";
+            document.getElementById("overlay").style.display = "none";
+        }
+        
+        function openRightNav() {
+            document.getElementById("myRightMenu").style.width = "250px";
+            document.getElementById("overlay").style.display = "block";
+        }
+        
+        function closeRightNav() {
+            document.getElementById("myRightMenu").style.width = "0";
+            document.getElementById("overlay").style.display = "none";
+        }
+        
+        function closeAllNav() {
+            closeNav();
+            closeRightNav();
+        }
+        
+        function toggleDarkMode() {
+            document.body.classList.toggle('light-mode');
+            closeRightNav();
+        }
+
+        function initMainContent() {
+            const leftMenu = document.querySelector(".logo-container img:first-child");
+            const rightMenu = document.querySelector(".logo-container img:last-child");
+            
+            if (leftMenu) {
+                leftMenu.addEventListener("click", openNav);
+            }
+            
+            if (rightMenu) {
+                rightMenu.addEventListener("click", openRightNav);
+            }
+        }
+        
+        function initImagePlaceholders() {
+            const productImages = document.querySelectorAll('.product-item img');
+            
+            productImages.forEach(img => {
+                img.onerror = function() {
+                    this.src = 'https://via.placeholder.com/190x290?text=Tidak+Ada+Gambar';
+                };
+                
+                if (!img.getAttribute('src') || img.getAttribute('src') === '') {
+                    this.src = 'https://via.placeholder.com/190x290?text=Tidak+Ada+Gambar';
+                }
+            });
+        }
+        
+        if (searchInput) {
+            searchInput.addEventListener('keyup', function(event) {
+                if (event.key === 'Enter') {
+                    searchProducts();
+                }
+            });
+        }
+        
+        function searchProducts() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const productItems = document.querySelectorAll('.product-item');
+            
+            productItems.forEach(item => {
+                const productName = item.querySelector('.product-name').textContent.toLowerCase();
+                if (productName.includes(searchTerm)) {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+        
+        window.addEventListener('resize', function() {
+            if (document.getElementById('splashScreen').style.display !== 'none') {
+                createWatermark('splashWatermark');
+            } else {
+                createWatermark('watermark');
+            }
+        });
+        
+        function openGallery(title, price, images) {
+            const modal = document.getElementById('galleryModal');
+            const mainImg = document.getElementById('galleryMainImg');
+            const thumbnailsContainer = document.getElementById('galleryThumbnails');
+            const titleEl = document.getElementById('galleryTitle');
+            const priceEl = document.getElementById('galleryPrice');
+            
+
+            titleEl.textContent = title;
+            priceEl.textContent = price;
+            
+            currentGalleryImages = images;
+            currentImageIndex = 0;
+            
+            thumbnailsContainer.innerHTML = '';
+            
+            images.forEach((img, index) => {
+                const thumbnail = document.createElement('img');
+                thumbnail.src = img;
+                thumbnail.alt = `Thumbnail ${index + 1}`;
+                thumbnail.className = 'gallery-thumbnail' + (index === 0 ? ' active' : '');
+                thumbnail.onclick = function() {
+                    currentImageIndex = index;
+                    updateGallery();
+                };
+                thumbnailsContainer.appendChild(thumbnail);
+            });
+            
+            mainImg.src = images[0];
+            
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeGallery() {
+            const modal = document.getElementById('galleryModal');
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+        
+        function changeImage(step) {
+            currentImageIndex += step;
+            
+            if (currentImageIndex < 0) {
+                currentImageIndex = currentGalleryImages.length - 1;
+            } else if (currentImageIndex >= currentGalleryImages.length) {
+                currentImageIndex = 0;
+            }
+            
+            updateGallery();
+        }
+        
+        function updateGallery() {
+            const mainImg = document.getElementById('galleryMainImg');
+            mainImg.src = currentGalleryImages[currentImageIndex];
+            
+            const thumbnails = document.querySelectorAll('.gallery-thumbnail');
+            thumbnails.forEach((thumb, index) => {
+                if (index === currentImageIndex) {
+                    thumb.classList.add('active');
+                } else {
+                    thumb.classList.remove('active');
+                }
+            });
+        }
+        
+        function showErrorModal() {
+            document.getElementById('errorModal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeErrorModal() {
+            document.getElementById('errorModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+        
+        window.onclick = function(event) {
+            const modal = document.getElementById('galleryModal');
+            const errorModal = document.getElementById('errorModal');
+            if (event.target === modal) {
+                closeGallery();
+            }
+            if (event.target === errorModal) {
+                closeErrorModal();
+            }
+        };
+        
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeGallery();
+                closeErrorModal();
+            } else if (event.key === 'ArrowLeft') {
+                changeImage(-1);
+            } else if (event.key === 'ArrowRight') {
+                changeImage(1);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ren Sirah - ZerlDoll @gamersbanjar</title>
+    <style>
+     * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #000;
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background-color 0.3s, color 0.3s;
+            position: relative;
+        }
+        
+        .watermark {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .watermark-item {
+            color: rgba(128, 128, 128, 0.15);
+            font-size: 18px;
+            font-weight: bold;
+            padding: 30px;
+            transform: rotate(-30deg);
+            white-space: nowrap;
+            user-select: none;
+        }
+        
+        body.light-mode {
+            background-color: #fff;
+            color: #000;
+        }
+
+        .header {
+            background-color: #e429b3;
+            padding: 3px 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        .logo-container {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 10px;
+        }
+
+        .title {
+            font-size: 2.5rem;
+            color: white;
+            font-family: "Times New Roman", Times, serif;
+            text-align: center;
+            flex-grow: 1;
+            cursor: pointer;
+        }
+        
+        .content-area {
+            margin-top: 60px;
+            padding-bottom: 80px;
+            padding: 80px 20px 80px 20px;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .footer {
+            background-color: #888;
+            padding: 3px 10px;
+            text-align: center;
+            line-height: 1.6;
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 1000;
+        }
+
+        .side-menu {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 2000;
+            top: 0;
+            left: 0;
+            background-color: #e429b3;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+        }
+
+        .side-menu a {
+            padding: 8px 8px 8px 32px;
+            text-decoration: none;
+            font-size: 25px;
+            color: white;
+            display: block;
+            transition: 0.3s;
+        }
+
+        .side-menu a:hover {
+            color: #f1f1f1;
+        }
+        
+        .side-menu .menu-gray {
+            color: #888 !important;
+            pointer-events: none;
+            cursor: default;
+        }
+
+        .side-menu .close-btn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+            margin-left: 50px;
+            text-decoration: none;
+        }
+
+        .overlay {
+            height: 100%;
+            width: 100%;
+            position: fixed;
+            z-index: 1500;
+            top: 0;
+            left: 0;
+            background-color: rgba(0,0,0,0.5);
+            overflow-x: hidden;
+            display: none;
+        }
+        
+        .right-menu {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 2000;
+            top: 0;
+            right: 0;
+            background-color: #e429b3;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+            text-align: center;
+        }
+
+        .right-menu a {
+            padding: 8px 32px;
+            text-decoration: none !important;
+            font-size: 25px;
+            color: white;
+            display: block;
+            transition: 0.3s;
+        }
+
+        .right-menu .close-btn {
+            position: absolute;
+            top: 0;
+            font-size: 36px;
+            text-decoration: none !important;
+        }
+        
+        .login-text {
+            color: #888;
+            margin-top: 10px;
+            font-size: 20px;
+            text-align: right;
+            padding-right: 32px;
+            cursor: pointer;
+        }
+        
+        .product-detail {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+        }
+        
+        @media (min-width: 768px) {
+            .product-detail {
+                flex-direction: row;
+                gap: 30px;
+            }
+        }
+        
+        .product-images {
+            flex: 1;
+            max-width: 100%;
+        }
+        
+        @media (min-width: 768px) {
+            .product-images {
+                max-width: 50%;
+            }
+        }
+        
+        .product-main-image {
+            width: 100%;
+            height: auto;
+            max-height: 500px;
+            object-fit: contain;
+            margin-bottom: 15px;
+        }
+        
+        .product-thumbnails {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+        
+        .product-thumbnail {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: border-color 0.3s;
+        }
+        
+        .product-thumbnail.active {
+            border-color: #e429b3;
+        }
+        
+        .product-info {
+            flex: 1;
+            padding: 20px 0;
+        }
+        
+        .product-title {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        
+        .product-price {
+            font-size: 1.8rem;
+            color: #34a534;
+            margin-bottom: 20px;
+        }
+        
+        .product-description {
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        
+        .product-features {
+            margin-bottom: 20px;
+        }
+        
+        .product-features h3 {
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+        
+        .product-features ul {
+            list-style-type: disc;
+            padding-left: 20px;
+        }
+        
+        .product-features li {
+            margin-bottom: 5px;
+        }
+        
+        .product-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        @media (min-width: 480px) {
+            .product-buttons {
+                flex-direction: row;
+            }
+        }
+        
+        .product-button {
+            padding: 15px;
+            font-size: 1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            flex: 1;
+            transition: background-color 0.3s ease;
+        }
+        
+        .buy-button {
+            background-color: #e429b3;
+            color: white;
+        }
+        
+        .buy-button:hover {
+            background-color: #b3217e;
+        }
+        
+        .chat-button {
+            background-color: #34a534;
+            color: white;
+        }
+        
+        .chat-button:hover {
+            background-color: #267c26;
+        }
+        
+        .back-button {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 8px 15px;
+            background-color: #333;
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        
+        .error-notification {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 20px;
+            border-radius: 5px;
+            z-index: 3000;
+            text-align: center;
+            display: none;
+            max-width: 80%;
+        }
+        
+        .error-notification h2 {
+            color: #ff4444;
+            margin-bottom: 10px;
+        }
+        
+        .error-notification p {
+            margin-bottom: 15px;
+        }
+        
+        .error-notification button {
+            background-color: #e429b3;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .error-notification button:hover {
+            background-color: #b3217e;
+        }
+    </style>
+</head>
+<body>
+    <div class="watermark" id="watermark"></div>
+    <div class="header">
+        <div class="logo-container">
+            <img src="foto1.png" alt="Foto 1" width="28" height="28">
+            <h1 class="title" onclick="window.location.href='index.html'">ZerlDoll</h1>
+            <img src="foto2.png" alt="Foto 2" width="35" height="35">
+        </div>
+    </div>
+
+    <div class="content-area">
+        <a href="index.html" class="back-button">« Kembali ke Beranda</a>
+        
+        <div class="product-detail">
+            <div class="product-images">
+                <img src="foto2.jpg" alt="Cute Theresa" class="product-main-image" id="mainProductImage">
+                
+                <div class="product-thumbnails">
+                    <img src="foto2.jpg" alt="Ren Sirah Foto 1" class="product-thumbnail active" onclick="changeProductImage('foto2.jpg', this)">
+                    <img src="foto2a.jpg" alt="Ren Sirah Foto 2" class="product-thumbnail" onclick="changeProductImage('foto2a.jpg', this)">
+                    <img src="foto2b.jpg" alt="Ren Sirah Foto 3" class="product-thumbnail" onclick="changeProductImage('foto2b.jpg', this)">
+                </div>
+            </div>
+            
+            <div class="product-info">
+                <h1 class="product-title">Ren Sirah - 160cm Silicone</h1>
+                <div class="product-price">Rp.37.199.000</div>
+                
+                <div class="product-description">
+                    <p>Ren Sirah adalah boneka premium dengan tinggi 160 cm berbahan silikon berkualitas tinggi. Boneka ini dirancang untuk memberikan pengalaman yang realistis dengan tekstur dan sensasi yang sangat menyerupai kulit asli.</p>
+                    <p>Didesain dengan wajah anak remaja Asia yang manis dan struktur tubuh yang proporsional, Ren Sirah akan memberikan kepuasan maksimal bagi para kolektor boneka premium.</p>
+                </div>
+                
+                <div class="product-features">
+                    <h3>Spesifikasi Produk:</h3>
+                    <ul>
+                        <li>Tinggi: 160cm</li>
+                        <li>Berat: 25kg</li>
+                        <li>Material: Silicone</li>
+                        <li>Struktur: Rangka besi dengan sendi yang dapat digerakkan</li>
+                        <li>Wajah: Hand-crafted dengan detail</li>
+                        <li>Fitur: "3 Hole" kulit lembut</li>
+                    </ul>
+                </div>
+                
+                <div class="product-buttons">
+                    <button class="product-button buy-button" onclick="show404Error()">Beli Sekarang</button>
+                    <button class="product-button chat-button" onclick="show404Error()">Spesifikasi Lengkap? WhatsApp</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <h5>Toko Boneka Premium Provinsi <b>Kalimantan Selatan</b></h5>
+        <h5><b>Banjarmasin, Marabahan, Amuntai, Batulicin</b></h5>
+    </div>
+
+    <div id="mySideMenu" class="side-menu">
+        <a href="javascript:void(0)" class="close-btn" onclick="closeNav()">&times;</a>
+        <a href="index.html">Beranda</a>
+        <a class="menu-gray">Tipe Boneka ></a>
+        <a class="menu-gray">Lokasi ></a>
+        <a href="https://www.tiktok.com/@gamersbanjar">Sosial Media</a>
+        <a class="menu-gray">Bantuan</a>
+        <a class="menu-gray">Blog</a>
+        <a></a>
+    </div>
+    
+    <div id="myRightMenu" class="right-menu">
+        <a href="javascript:void(0)" class="close-btn" onclick="closeRightNav()" style="text-decoration: none !important;">&times;</a>
+        <a style="text-align: right;" href="#" onclick="toggleDarkMode()">Mode Gelap/Terang</a>
+        <div class="login-text">Log In</div>
+    </div>
+
+    <div id="overlay" class="overlay" onclick="closeAllNav()"></div>
+    
+    <div id="errorNotification" class="error-notification">
+        <h2>404 Error Not Found</h2>
+        <p>Chat via TikTok saja, Halaman ini masih di kembangkan. TikTok: @gamersbanjar</p>
+        <button onclick="closeErrorNotification()">Tutup</button>
+    </div>
+
+    <script>
+        function createWatermark(containerId) {
+            const watermarkContainer = document.getElementById(containerId);
+            if (!watermarkContainer) return;
+            
+            const screenWidth = window.innerWidth;
+            const screenHeight = window.innerHeight;
+            
+            watermarkContainer.innerHTML = '';
+            
+            const columns = Math.ceil(screenWidth / 150);
+            const rows = Math.ceil(screenHeight / 100);
+            
+            for (let i = 0; i < rows; i++) {
+                for (let j = 0; j < columns; j++) {
+                    const watermarkItem = document.createElement('div');
+                    watermarkItem.className = 'watermark-item';
+                    watermarkItem.textContent = '@gamersbanjar';
+                    watermarkContainer.appendChild(watermarkItem);
+                }
+            }
+        }
+        
+        document.addEventListener("DOMContentLoaded", function() {
+            createWatermark('watermark');
+            initMainContent();
+            initImagePlaceholders();
+        });
+
+        function openNav() {
+            document.getElementById("mySideMenu").style.width = "250px";
+            document.getElementById("overlay").style.display = "block";
+        }
+
+        function closeNav() {
+            document.getElementById("mySideMenu").style.width = "0";
+            document.getElementById("overlay").style.display = "none";
+        }
+        
+        function openRightNav() {
+            document.getElementById("myRightMenu").style.width = "250px";
+            document.getElementById("overlay").style.display = "block";
+        }
+        
+        function closeRightNav() {
+            document.getElementById("myRightMenu").style.width = "0";
+            document.getElementById("overlay").style.display = "none";
+        }
+        
+        function closeAllNav() {
+            closeNav();
+            closeRightNav();
+        }
+        
+        function toggleDarkMode() {
+            document.body.classList.toggle('light-mode');
+            closeRightNav();
+        }
+
+        function initMainContent() {
+            const leftMenu = document.querySelector(".logo-container img:first-child");
+            const rightMenu = document.querySelector(".logo-container img:last-child");
+            
+            if (leftMenu) {
+                leftMenu.addEventListener("click", openNav);
+            }
+            
+            if (rightMenu) {
+                rightMenu.addEventListener("click", openRightNav);
+            }
+        }
+        
+        function initImagePlaceholders() {
+            const productImages = document.querySelectorAll('img');
+            
+            productImages.forEach(img => {
+                img.onerror = function() {
+                    if (this.classList.contains('product-main-image')) {
+                        this.src = 'https://via.placeholder.com/500x500?text=Tidak+Ada+Gambar';
+                    } else if (this.classList.contains('product-thumbnail')) {
+                        this.src = 'https://via.placeholder.com/80x80?text=Tidak+Ada+Gambar';
+                    } else {
+                        this.src = 'https://via.placeholder.com/190x290?text=Tidak+Ada+Gambar';
+                    }
+                };
+            });
+        }
+        
+        function changeProductImage(imgSrc, thumbnailEl) {
+            document.getElementById('mainProductImage').src = imgSrc;
+            
+            document.querySelectorAll('.product-thumbnail').forEach(thumb => {
+                thumb.classList.remove('active');
+            });
+            
+            thumbnailEl.classList.add('active');
+        }
+        
+          function show404Error() {
+            document.getElementById("errorNotification").style.display = "block";
+            document.getElementById("overlay").style.display = "block";
+        }
+        
+        function closeErrorNotification() {
+            document.getElementById("errorNotification").style.display = "none";
+            document.getElementById("overlay").style.display = "none";
+        }
+        
+        window.addEventListener('resize', function() {
+            createWatermark('watermark');
+        });
+    </script>
+</body>
+</html>
